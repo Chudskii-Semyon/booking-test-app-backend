@@ -1,0 +1,28 @@
+version: '3'
+services:
+  mongo:
+    image: "mongo:latest"
+    restart: "always"
+    networks:
+      - express-mongo-network
+    expose:
+      - 27017
+    ports:
+      - 27017
+  node-app:
+    build: .
+    ports:
+      - "4000:4000"
+    networks:
+      - express-mongo-network
+    environment:
+      - DB_HOST=mongo
+    depends_on:
+      - mongo
+    links:
+      - mongo
+
+
+networks:
+  express-mongo-network:
+    driver: bridge
